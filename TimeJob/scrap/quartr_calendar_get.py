@@ -9,6 +9,7 @@ from lib.Common.utils import clean_none
 
 SOURCE = "quartr"
 PATH = Config.PATH
+from lib.Common.cos_utils import get_origin_file_cos_instance
 
 
 def handle(node, headers, date, symbol):
@@ -213,7 +214,7 @@ def download_file(file_url, local_file_path, header):
         if response.status_code == 200:
             with open(local_file_path, 'wb') as file:
                 file.write(response.content)
-            from lib.Common.cos_utils import get_origin_file_cos_instance
+
             cos_tool = get_origin_file_cos_instance()
             upload_response = cos_tool.upload_file(local_file_path, local_file_path)
             if upload_response is None:
@@ -254,7 +255,7 @@ def get_quartr_calendar():
 
         headers = {'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
                    'content-type': 'application/json', 'sec-ch-ua-mobile': '?0',
-                   'authorization': 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI2VFFPVHpfWjZwM0M5alg5SFVLSmxoOTdLN1d4NG5WUGdwSkxxMFlpVHM4In0.eyJleHAiOjE3MzA5NzE1MzYsImlhdCI6MTcyOTc2MTkzNywiYXV0aF90aW1lIjoxNzI5NzYxOTM2LCJqdGkiOiJlZTA4MWU2MS0yNjEzLTQ5ZDgtYjIzNS1jMDZmYjYzZmY2NjQiLCJpc3MiOiJodHRwczovL2F1dGgucXVhcnRyLmNvbS9yZWFsbXMvcHJvZCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIwZjBhZDg1YS1mNTM3LTQ1NWUtYmMyOC0zZWMwOTg5NDA0MzIiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJ3ZWIiLCJzaWQiOiJkZjQ0OGI0Mi02NTNkLTQzNjItOGM3Yy1lNjZiZGE4NzhhYzYiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHBzOi8vcHItKi5xdWFydHIudmVyY2VsLmFwcCIsImh0dHBzOi8vd2ViLWRldi5xdWFydHIuY29tIiwiaHR0cDovL2xvY2FsaG9zdDozMDAwLyoiLCJodHRwczovL3dlYi5xdWFydHIuY29tIiwiaHR0cDovL2xvY2FsaG9zdDozMDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtcHJvZCIsInVtYV9hdXRob3JpemF0aW9uIiwidXNlciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHVzZXJfZGF0YSBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJDaGVpbiBEYSIsImlkIjo1ODY3OTYsInByZWZlcnJlZF91c2VybmFtZSI6ImRhY2hlaW4ueEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiQ2hlaW4iLCJmYW1pbHlfbmFtZSI6IkRhIiwiZW1haWwiOiJkYWNoZWluLnhAZ21haWwuY29tIn0.E7bMKKrYNr9iCchcAtTHmBqWLaJoijHYemGbj0jkN4DPo9frRwoV4Gl82H5jrJvLEaqW-nhDeeQxG0_wfGMnLIl4QOQkj5AtNq5dIllk-Pu-lBS972BEE0M0nHYie_RKUGXu5QSXtrh21t8Ijq3wjQUHStE4meKzUHEqB0HjQfGbIvYqeAOd-t5jWW7QrefGuxRPl9Oouk93pql-Nv5oC1K61CT28CT0IJFcuh_XFLPmvFdjbwBqrx0T-Dn7tSx5SYLoan9jUO2An6c3RslWK60Mxq_XwzJSvdKdP6FX9JC7KI9zgk4xoUW-xgyqfdUdYPKw1bf91sEESQZAjSKKZA',
+                   'authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI2VFFPVHpfWjZwM0M5alg5SFVLSmxoOTdLN1d4NG5WUGdwSkxxMFlpVHM4In0.eyJleHAiOjE3MzQ1MDY3OTQsImlhdCI6MTczMzI5NzE5NSwiYXV0aF90aW1lIjoxNzMzMjk3MTk0LCJqdGkiOiI0YjUxMDdiMS00MjY0LTQwYzgtYWVmYS1iYmEwNGY1MzhmYjUiLCJpc3MiOiJodHRwczovL2F1dGgucXVhcnRyLmNvbS9yZWFsbXMvcHJvZCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIwZjBhZDg1YS1mNTM3LTQ1NWUtYmMyOC0zZWMwOTg5NDA0MzIiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJ3ZWIiLCJzaWQiOiIzZjc4YjAwNC1iZDBiLTRhMDEtYTQyYi05YjFmYzAxOGFmOWIiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHBzOi8vcHItKi5xdWFydHIudmVyY2VsLmFwcCIsImh0dHBzOi8vd2ViLWRldi5xdWFydHIuY29tIiwiaHR0cDovL2xvY2FsaG9zdDozMDAwLyoiLCJodHRwczovL3dlYi5xdWFydHIuY29tIiwiaHR0cDovL2xvY2FsaG9zdDozMDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtcHJvZCIsInVtYV9hdXRob3JpemF0aW9uIiwidXNlciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHVzZXJfZGF0YSBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJDaGVpbiBEYSIsImlkIjo1ODY3OTYsInByZWZlcnJlZF91c2VybmFtZSI6ImRhY2hlaW4ueEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiQ2hlaW4iLCJmYW1pbHlfbmFtZSI6IkRhIiwiZW1haWwiOiJkYWNoZWluLnhAZ21haWwuY29tIn0.gOYwMXZBKRMMWFv8t8XpHuIzIP48UwHXeAS-HXjxbJjWpxFTW2V5JpkSMkxorVSJoNV9BjTj_j1bnPLK4gD5PytVchCRq5fIBV-wYp5d2NF7bRNh5RE9B9S1dNma2MqYHbaJ3A8xFYB4IfNoe4B8FV4q1Y7u1LN5kQp7DX5JPBPBHfH7k8Ve7p-FnmpEIRi0MJL9XiZcEH-l06jRn-qKgOVV50DXQgEps22NEWHTVOnhbBRbtSZbMYt9BtxtIdV_xU64YUNm3NvOvvDwD3cj2LvyMh4LjnFOAzTZbHXIG3PwO7QL_0nkWQj7FKvnN3Ydz-6gN-tpHkJUdSfjyFJbKA',
                    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:55.0) Gecko/20100101 Firefox/55.0',
                    'sec-ch-ua-platform': '"Windows"', 'accept': '*/*', 'origin': 'https://web.quartr.com',
                    'sec-fetch-site': 'same-site', 'sec-fetch-mode': 'cors', 'sec-fetch-dest': 'empty',

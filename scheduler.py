@@ -2,7 +2,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 import atexit
 
-from TimeJob import sync_research_glide
+from TimeJob.sync_research_glide import sync_research_glide
 from TimeJob.content_generate.pre_handle_meta import pre_handle_meta
 from TimeJob.embedding.research_embedding import sync_research_embedding
 from TimeJob.insight.sync_reseach import sync_research
@@ -108,18 +108,12 @@ def init_scheduler():
 
     # 研究报告同步任务
     scheduler.add_job(
-        func=sync_research,
+        func= sync_research_glide,
         trigger=CronTrigger(minute='*/5'),
-        id='sync_research_glide_job',
-        name='sync_research_glide_job',
+        id='sync_research_glide',
+        name='sync_research_glide',
         replace_existing=True)
 
-    scheduler.add_job(
-        func=update,
-        trigger=CronTrigger(minute='*/5'),
-        id='sync_research_glide_job',
-        name='sync_research_glide_job',
-        replace_existing=True)
 
     # 确保在应用退出时关闭调度器
     atexit.register(lambda: scheduler.shutdown())

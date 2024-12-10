@@ -13,3 +13,7 @@ from TimeJob.sa.sync_insight_sa_article import update
 # if __name__ == '__main__':
 #     sync_research()
 #     update()
+
+def sync_research_glide():
+    sync_research()
+    update()

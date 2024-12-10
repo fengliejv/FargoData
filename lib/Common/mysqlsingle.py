@@ -8,14 +8,6 @@ class MySQL(object):
 
     @staticmethod
     def get_instance():
-        
-        
-        
-        
-        
-        
-        
-        
         MySQL._instance = MySQL()
         return MySQL._instance
 
